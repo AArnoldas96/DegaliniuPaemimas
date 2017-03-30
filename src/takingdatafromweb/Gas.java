@@ -12,23 +12,26 @@ import java.util.List;
  * @author X
  */
 public class Gas {
-    String miestas;
-    String degaline;
     String adresas;
-    String telefonas;
-    String produktai;
-    String [] papild;
+    String pav;
+    String food;
+    String air;
+    String carwash;
+    
     public Gas(){
         
     }
-    public Gas(String miestas, String degaline, String adresas,String telefonas,String produktai,String [] papild){
-        this.miestas=miestas;
-        this.degaline=degaline;
+    public Gas(String pav, String adresas, String maistas, String oras, String plovykla){
+        this.pav = pav;
         this.adresas=adresas;
-        this.telefonas=telefonas;
-        this.produktai=produktai;
-        this.papild=papild;
+        this.food = maistas;
+        this.air = oras;
+        this.carwash = plovykla;
     }
     
-    
+    @Override
+    public String toString(){
+        String result = this.adresas+";"+this.pav+";"+this.food+";"+this.air+";"+this.carwash;
+        return result;
+    }
 }
