@@ -17,6 +17,8 @@ public class Gas {
     String food;
     String air;
     String carwash;
+    String latitude;
+    String longtitude;
     
     public Gas(){
         
@@ -33,5 +35,15 @@ public class Gas {
     public String toString(){
         String result = this.adresas+";"+this.pav+";"+this.food+";"+this.air+";"+this.carwash;
         return result;
+    }
+    
+    public String toStringWithLatLng(){
+        String result = this.adresas+";"+this.pav+";"+this.food+";"+this.air+";"+this.carwash+";"+this.latitude+";"+this.longtitude;
+        return result;
+    }
+    
+    public void setLatLng(String lat, String lng){
+        this.latitude = lat;
+        this.longtitude = lng;
     }
 }
