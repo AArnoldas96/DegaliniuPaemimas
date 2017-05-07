@@ -12,13 +12,13 @@ import java.util.List;
  * @author X
  */
 public class Gas {
-    String adresas;
-    String pav;
-    String food;
-    String air;
-    String carwash;
-    String latitude;
-    String longtitude;
+    private String adresas;
+    private String pav;
+    private String food;
+    private String air;
+    private String carwash;
+    private String latitude;
+    private String longtitude;
     
     public Gas(){
         
@@ -45,5 +45,17 @@ public class Gas {
     public void setLatLng(String lat, String lng){
         this.latitude = lat;
         this.longtitude = lng;
+    }
+    
+    public String getAdress(){
+        return this.adresas;
+    }
+    
+    public String getLatitude(){
+        return this.latitude;
+    }
+    
+    public String getLongtitude(){
+        return this.longtitude;
     }
 }

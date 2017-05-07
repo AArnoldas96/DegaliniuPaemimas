@@ -46,8 +46,8 @@ public class GetLatLng {
         StationMaking(stations, stationArray);
         for (Gas station : stationArray) {
             try{
-            String[] LatLng = getLocationFromAddress(station.adresas);
-            System.out.printf("%s %s %s\n", station.adresas, LatLng[0], LatLng[1]);
+            String[] LatLng = getLocationFromAddress(station.getAdress());
+            System.out.printf("%s %s %s\n", station.getAdress(), LatLng[0], LatLng[1]);
             station.setLatLng(LatLng[0], LatLng[1]);
             } 
             catch (Exception e) {
@@ -85,7 +85,7 @@ public class GetLatLng {
         }
     }
     
-    private static String[] getLocationFromAddress(String address) throws Exception{
+    public static String[] getLocationFromAddress(String address) throws Exception{
         TimeUnit.MILLISECONDS.sleep(250);
         int responseCode = 0;
         String api = "http://maps.googleapis.com/maps/api/geocode/xml?address=" + URLEncoder.encode(address, "UTF-8") + "&sensor=true";
@@ -119,7 +119,7 @@ public class GetLatLng {
     public static void writeStationsToFile(Gas[] stations, String filename) throws IOException{
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"))) {
             for (int i = 0; i < stations.length; i++) {
-                if (stations[i].latitude != null && stations[i].longtitude != null){
+                if (stations[i].getLatitude() != null && stations[i].getLongtitude() != null){
                     writer.write(stations[i].toStringWithLatLng());
                     writer.newLine();
                 }
