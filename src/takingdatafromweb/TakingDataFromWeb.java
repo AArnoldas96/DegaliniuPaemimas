@@ -21,10 +21,9 @@ public class TakingDataFromWeb {
     public static void getStations(List<Gas> stations) throws IOException{
         nesteGas(stations);
         orlenGas(stations);
-        lukoilGas(stations);
+        lukoilLuktarna(stations);
         bpGas(stations);
         jozitaGas(stations);
-        luktarnaGas(stations);
     }
     
     public static void writeStationsToFile(List<Gas> stations, String filename) throws IOException{
@@ -120,30 +119,6 @@ public class TakingDataFromWeb {
         }
     }
     
-    public static void lukoilGas(List<Gas> stations) throws IOException{
-        String url="http://www.lukoil.lt/degalines/informacija_apie_degalines";
-        Document document = Jsoup.connect(url).get();
-        Element table = document.select("table.degalines").get(0);
-        Elements rows = table.select("tr");
-        for (int j = 2; j < rows.size()-1; j++) { 
-            Element row=rows.get(j);
-            Elements cols = row.select("td");
-            String adresas;
-            adresas =cols.get(0).text().charAt(cols.get(0).text().length()-1)=='*'
-                    ?cols.get(0).text().substring(0,cols.get(0).text().length()-2)
-                    :cols.get(0).text();
-            String foodBool;
-            String airBool;
-            String carwashBool;
-            foodBool=cols.get(13).text().isEmpty()?"false":"true";
-            carwashBool=cols.get(15).text().isEmpty()?"false":"true";
-            airBool=cols.get(19).select("[src]").toString().isEmpty()?"false":"true";
-            Gas station = new Gas("Lukoil", adresas, foodBool, airBool, carwashBool);
-            stations.add(station);
-            //System.out.println(station.toString());
-        }
-    }
-    
     public static void bpGas(List<Gas> stations) throws IOException{
         String url="http://balticpetroleum.lt/baltic-petroleum-degalines";
         String food="/uploads/images/ikonos/uzkandziai.png";
@@ -206,36 +181,27 @@ public class TakingDataFromWeb {
         }
     }
     
-    public static void luktarnaGas(List<Gas> stations) throws IOException{
-        String url="http://www.luktarna.lt/degalines";
+    public static void lukoilLuktarna(List<Gas> stations) throws IOException{
+        String url="http://www.viada.lt/degalines/informacija-apie-degalines/";
         Document document = Jsoup.connect(url).get();
-        String luktarnaLogo="images/graphics/1181315803.gif";
-        String food = "images/ikon_maistas.gif";
-        String air = "images/ikon_vanduo_oras.gif";
-        String carwash = "images/plovykla.gif";
-        Element table = document.select(".collapse").get(0);
-        Elements rows = table.select("tr");
-        for (int i = 1; i < rows.size(); i++){
-            Element row = rows.get(i);
-            Elements cols = row.select("td");
-            String tinklas = cols.get(1).toString();
-            String foodBool = "false";
-            String airBool = "false";
-            String carwashBool = "false";
-            String adresas;
-            if (tinklas.contains(luktarnaLogo)){
-                adresas = cols.get(0).text();
-                String options = cols.select("[src]").toString();
-                String[] optionSplit = options.split("alt=");
-                 for (String part : optionSplit){
-                    if (part.contains(food))
-                        foodBool = "true";
-                    if (part.contains(air))
-                        airBool = "true";
-                    if (part.contains(carwash))
-                        carwashBool = "true";
-                }
-                Gas station = new Gas("Luktarna", adresas, foodBool, airBool, carwashBool);
+        Elements rows = document.select(".table tbody tr");
+        //Elements rows = table.select("tr");
+        for (int j = 0; j < rows.size(); j++) {
+            if(rows.get(j).text().length()>100){
+                Element row=rows.get(j);
+                Elements cols = row.select("td");
+                String[] parametrai=new String[6];
+                parametrai[0]=cols.get(0).text();  //miestas
+                if(cols.get(1).toString().contains("lukoil")==true)
+                    parametrai[1]="Lukoil";
+                else if(cols.get(1).toString().contains("luktarna")==true)
+                    parametrai[1]="Lukatarna";
+                else
+                    parametrai[1]="Viada";
+                parametrai[2]=cols.get(4).toString().contains("Parduotuvė")==true ? "true" : "false";
+                parametrai[3]=cols.get(4).toString().contains("Oro")==true ? "true" : "false";
+                parametrai[4]=cols.get(4).toString().contains("Plovykla")==true ? "true" : "false";
+                Gas station = new Gas(parametrai[1], parametrai[0], parametrai[2], parametrai[3], parametrai[4]);
                 stations.add(station);
                 //System.out.println(station.toString());
             }
